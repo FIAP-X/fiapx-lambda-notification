@@ -30,14 +30,12 @@ def lambda_handler(event, context):
             email = get_user_email(cognito_client, cognito_user_pool_id, user_id)
             
             if email:
-                logger.info(f"E-mail do usuário {user_id}: {email}")
+                logger.info(f"Processamento bem-sucedido. Usuário: {user_id}, E-mail: {email}")
             else:
                 logger.warning(f"E-mail não encontrado para o usuário {user_id}")
 
         except Exception as e:
-            logger.error(f"Erro ao buscar o e-mail do usuário {user_id}: {str(e)}")
-        
-        logger.error(f"Erro no processamento do vídeo. Usuário: {user_id}, Email: {email}")
+            logger.error(f"Erro ao buscar o e-mail do usuário {user_id}: {str(e)} | Request ID: {context.aws_request_id}")
 
     # Devido a limitações do lab aws o SES não foi integrado!
     return {
