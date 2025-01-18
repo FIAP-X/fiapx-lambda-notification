@@ -1,0 +1,58 @@
+name: Deploy Lambda Function
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+  AWS_REGION: 'us-east-1'
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    env:
+      TF_WORKING_DIR: './infra'
+
+    defaults:
+      run:
+        shell: bash
+        working-directory: ${{ env.TF_WORKING_DIR }}  
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
+          
+      - name: Zip Lambda Function
+        run: zip -r ../../lambda_function.zip .
+        working-directory: app/src
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2 
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Format Fix
+        run: terraform fmt -write=true 
+
+      - name: Terraform Fmt
+        run: terraform fmt -check -no-color  
+
+      - name: Terraform Validate
+        run: terraform validate -no-color  
+
+      - name: Terraform Plan
+        run: terraform plan -out terraform.plan
+
+      - name: Terraform Apply 
+        run: terraform apply -auto-approve
