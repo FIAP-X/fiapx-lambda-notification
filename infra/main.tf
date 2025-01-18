@@ -14,4 +14,14 @@ resource "aws_lambda_function" "lambda_notification" {
       COGNITO_USER_POOL_ID         = var.cognito_user_pool_id
     }
   }
+
+  dead_letter_config {
+    target_arn = var.dlq_arn
+  }
+}
+
+resource "aws_lambda_event_source_mapping" "lambda_dlq_trigger" {
+  event_source_arn = var.dlq_arn
+  function_name    = aws_lambda_function.lambda_notification.arn
+  enabled          = true
 }

@@ -35,3 +35,8 @@ variable "cognito_user_pool_id" {
   description = "ID do usuário no Cognito"
   type        = string
 }
+
+variable "dlq_arn" {
+  description = "O ARN da DLQ para ser usado como Dead Letter Queue"
+  type        = string
+}
