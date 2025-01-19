@@ -2,7 +2,7 @@ import os
 import json
 import unittest
 from unittest.mock import patch, MagicMock
-from src.lambda_function import lambda_handler, extract_user_id, get_user_email
+from lambda_function import lambda_handler, extract_user_id, get_user_email
 
 class TestLambdaHandler(unittest.TestCase):
 
