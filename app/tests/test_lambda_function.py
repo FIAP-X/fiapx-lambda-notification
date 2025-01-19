@@ -71,9 +71,10 @@ class TestLambdaHandler(unittest.TestCase):
 
         mock_cognito_client.admin_get_user.side_effect = mock_cognito_client.exceptions.UserNotFoundException
 
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(mock_cognito_client.exceptions.UserNotFoundException) as context:
             get_user_email(mock_cognito_client, 'fake-user-pool-id', 'user123')
-        self.assertIn("Usuário user123 não encontrado no Cognito", str(context.exception))
+
+        self.assertIn("UserNotFoundException", str(context.exception))
 
     @patch('lambda_function.boto3.client')
     def test_get_user_email_error(self, mock_boto_client):
@@ -84,6 +85,7 @@ class TestLambdaHandler(unittest.TestCase):
 
         with self.assertRaises(Exception) as context:
             get_user_email(mock_cognito_client, 'fake-user-pool-id', 'user123')
+
         self.assertIn("Erro ao buscar dados do usuário user123 no Cognito", str(context.exception))
 
 if __name__ == '__main__':
