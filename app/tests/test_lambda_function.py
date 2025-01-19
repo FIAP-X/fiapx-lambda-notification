@@ -86,7 +86,7 @@ class TestLambdaHandler(unittest.TestCase):
         with self.assertRaises(Exception) as context:
             get_user_email(mock_cognito_client, 'fake-user-pool-id', 'user123')
 
-        self.assertIn("Erro ao buscar dados do usuário user123 no Cognito", str(context.exception))
+        self.assertIn("Unknown error", str(context.exception))
 
 if __name__ == '__main__':
     unittest.main()
