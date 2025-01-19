@@ -24,7 +24,7 @@ jobs:
 
       - name: Run tests
         run: |
-          export PYTHONPATH=$PYTHONPATH:app
+          export PYTHONPATH=$PYTHONPATH:app/scr
           python -m unittest discover -s app/tests -p "test_*.py"   
 
       - name: Create Pull Request
