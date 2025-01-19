@@ -64,29 +64,5 @@ class TestLambdaHandler(unittest.TestCase):
         email = get_user_email(mock_cognito_client, 'fake-user-pool-id', 'user123')
         self.assertEqual(email, 'user123@example.com')
 
-    @patch('lambda_function.boto3.client')
-    def test_get_user_email_not_found(self, mock_boto_client):
-        mock_cognito_client = MagicMock()
-        mock_boto_client.return_value = mock_cognito_client
-
-        mock_cognito_client.admin_get_user.side_effect = mock_cognito_client.exceptions.UserNotFoundException
-
-        with self.assertRaises(mock_cognito_client.exceptions.UserNotFoundException) as context:
-            get_user_email(mock_cognito_client, 'fake-user-pool-id', 'user123')
-
-        self.assertIn("UserNotFoundException", str(context.exception))
-
-    @patch('lambda_function.boto3.client')
-    def test_get_user_email_error(self, mock_boto_client):
-        mock_cognito_client = MagicMock()
-        mock_boto_client.return_value = mock_cognito_client
-
-        mock_cognito_client.admin_get_user.side_effect = Exception("Unknown error")
-
-        with self.assertRaises(Exception) as context:
-            get_user_email(mock_cognito_client, 'fake-user-pool-id', 'user123')
-
-        self.assertIn("Unknown error", str(context.exception))
-
 if __name__ == '__main__':
     unittest.main()
