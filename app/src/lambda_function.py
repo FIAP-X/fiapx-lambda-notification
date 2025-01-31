@@ -40,7 +40,7 @@ def lambda_handler(event, context):
     # Devido a limitações do lab aws o SES não foi integrado!
     return {
         "statusCode": 200,
-        "body": json.dumps("Mensagens processadas e logs registrados.")
+        "body": json.dumps("Mensagens processadas com sucesso")
     }
 
 def extract_user_id(message):
